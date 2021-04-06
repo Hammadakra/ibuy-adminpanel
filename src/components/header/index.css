@@ -1,0 +1,84 @@
+.mainbavbar{
+    background-color: #094457;
+}
+.logo{
+    width: 100px;
+    height: 50px;
+}
+/* 
+} */
+.MAINHEAD{
+    font-size: 25px !important;
+  
+}
+
+.navbar-dark .navbar-nav .nav-link
+{
+    display: flex;
+    align-items: center;
+}
+
+.nav-link
+{
+    background-color: #094457;
+}
+a 
+{
+    color: aliceblue !important;
+}
+
+.Recipt
+{
+    color: brown;
+}
+
+@media screen and (max-width : 600px ){
+
+
+.nav-link 
+{
+ font-size: 3rem;   
+}
+}
+
+
+.nav-link 
+{
+ font-size: 1rem;   
+}
+.Approve .btn button
+{
+    background-color: rgb(9, 248, 117) !important;
+}
+
+.buttons
+{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.HomeNext
+{
+    
+}
+
+/* //#09445 */
+
+
+.MuiTableCell-head  {
+    color: #fff;
+    background-color: #094457 !important;
+}
+
+.mainContainer
+{
+    display: flex;
+}
+
+/* MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-submit-6 MuiButton-containedPrimary MuiButton-fullWidth */
+
+.MuiButton-containedPrimary 
+
+{
+    background-color: #094457 !important;
+}
