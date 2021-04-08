@@ -4,6 +4,7 @@ MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon } from "mdbreact";
 import { BrowserRouter as Router } from 'react-router-dom';
 import logo from './../../assets/ibuy_logo.PNG';
 import './index.css';
+import {auth} from '../../Firebase/Firebase';
 class NavbarPage extends Component {
 state = {
   isOpen: false
@@ -12,6 +13,8 @@ state = {
 toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
 }
+
+
 
 render() {
   return (

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import './style.css';
+import ApproveRecipt from '../ApprovedRecipt/ApproveRecipt'
 import rec from '../../assets/images/rec.PNG';
 import {
   createMuiTheme,
@@ -37,21 +38,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReciptAppRej(props) {
   const classes = useStyles();
-  const { row } = props;
-  // const {rows} = props;
-    // console.log(row);
+  const { Allrow } = props;
+   const {row} = props;
+    console.log("Only Selected row",row);
+    console.log('All Object of Table', Allrow)
 
-    const [count ,setCount] = useState(0);
+    // const [currentIndex,setCurrentIndex] = useState(row.id);
     
-    const nextRows = () => 
-    {
-      console.log("Data from Recipt Main",row[count]);
-    }
+    // var currentIndex = row.id
+    // console.log(currentIndex)
+    
+    // const [count ,setCount] = useState(0);
+    const [selectedRow,setSelectedRow] = useState(false);    
+    const [selRowData ,setSelRowData] = useState(row);
 
+    const [app ,setApp] = useState();
+    const [upIndex,setUpIndex] =useState(row.id);
+     console.log("dass",upIndex);
+    // const nextIndex = () =>
+    // {
+    //   currentIndex=currentIndex+1;
+    // }
 
-
-    console.log("Data from OutSide the function",row[count]);
- 
+    // console.log("Data from OutSide the function",row[count]);
+  
   return (
     <div className='mainContainer'>
         
@@ -70,14 +80,14 @@ export default function ReciptAppRej(props) {
           required
           label="Customer Id"
           id="outlined-required"
-          value={row[count].CustomerId}
+          value={Allrow[upIndex].CustomerId}
           variant="outlined"
         />
         <TextField
           required
           id="outlined-required"
           label="Retailer Name"
-          value={row[count].RetailerName}
+          value={Allrow[upIndex].RetailerName}
           variant="outlined"
         />
         <br></br>
@@ -117,10 +127,7 @@ export default function ReciptAppRej(props) {
           variant="outlined"
         />
       </div>
-      {/* <div className="appRej">
-        <button type="button" class="btn btn-success" name="button"> Approve</button>
-        <button type="button" class="btn btn-red" name="button">Reject</button>
-      </div>  */}
+     
   </div>
 
        <div className="ReciptPic" >
@@ -130,17 +137,16 @@ export default function ReciptAppRej(props) {
 
 
 
-
   <div className="buttons">
   <div className= 'HomeNext' >
-        <button type="button" class="btn btn-success" name="button">Approve</button>
+        <button type="button" class="btn btn-success" name="button" onClick={() => setApp(row)}>Approve </button>
         <button type="button" class="btn btn-red" name="button" >Reject </button>
       </div>
   
 
       <div className= 'HomeNext' >
         <button type="button" class="btn btn-primary" name="button">Home</button>
-        <button type="button" class="btn btn-primary" name="button" onClick={ () => setCount(count+1)}>next</button>
+        <button type="button" class="btn btn-primary" name="button" onClick={() => setUpIndex(upIndex+1) } >next</button>
       </div>
   </div>      
     
@@ -150,11 +156,10 @@ export default function ReciptAppRej(props) {
 {/* <div className="ReciptPic"></div> */}
  
 
-    
-
-
-
-
+    {/* row[count] */}
+      <div style={{visibility:"hidden"}}>
+      { selectedRow || <ApproveRecipt selRow = {app} />   }
+      </div>
     </div>
   );
 }

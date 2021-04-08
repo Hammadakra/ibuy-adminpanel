@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
     height: '70vh',
   },
   image: {
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
+    
     backgroundImage: `url(${store})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -51,14 +51,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Homepage() {
   const classes = useStyles();
-const history=useHistory();
-const [email,setEmail]=useState();
-const [password,setPassword]=useState();
-console.log(email,password);
-const loginauth=(e)=>{
+  const history=useHistory();
+  const [email,setEmail]=useState();
+  const [password,setPassword]=useState();
+  
+  console.log(email,password);
+  
+  const loginauth=(e)=>{
     e.preventDefault()
-   auth.WithEmailAndPassword(email, password)
-  .then((userCredential) => {
+    auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
     console.log("login success",user)
@@ -67,25 +69,27 @@ const loginauth=(e)=>{
   .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.message;
+    alert("Entred Invalid Info");
   });
 }
   return (
       <div className ="homepagecontainer">
           <div className="homepage-mainheadeing">
-              {/* <h1 >IBUY RETAILER APP</h1> */}
-
+  
           </div>
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign In
-          </Typography>
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+            <div className={classes.paper}>
+               <Avatar className={classes.avatar}>
+                     <LockOutlinedIcon />
+               </Avatar>
+          
+              <Typography component="h1" variant="h5">
+                         Sign In
+              </Typography>
+         
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"

@@ -11,6 +11,9 @@ import './style.css'
 // import ReciptAppRej from './ReciptAppRej'
 import { SettingsInputAntenna } from '@material-ui/icons';
 import ReciptAppRej from '../ReciptAppRej/ReciptAppRej';
+import {auth} from '../../Firebase/Firebase'
+import {db} from '../../Firebase/Firebase'
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -37,25 +40,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables() {
+export default function CustomizedTables(props) {
   const classes = useStyles();
-  function createData(RetailerName, CustomerId, ReciptId, status) {
-    
-    return { RetailerName, CustomerId, ReciptId, status };
+  const {ApproveRow}  = props;
+  
+const [ap,setAp]=useState(ApproveRow)
+  function createData(id,RetailerName, CustomerId, ReciptId, status) {  
+    return { id,RetailerName, CustomerId, ReciptId, status };
   }
+
+
   const [newRec,setnewRec] = useState(false);
   const [currentRecord, setCurrentRecord] = useState();
-  
-  {
-
-  }
-
+  console.log("In  osam Approved",ApproveRow)
   const rows = [
-    createData('Walmart', 159, 6.0, false),//, <a onClick ={() => setnewRec(!newRec)}>New </a>  ,),
-    createData('Metro', 237, 9.0, false),//<a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('Amazon', 262, 16.0, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('Shopify', 356, 16.0, false),// <a >New</a>),
+    createData(ApproveRow?.id,ApproveRow?.RetailerName, 159, 6.0, false),
+    // createData(2,'Metro', 237, 9.0, false),
+    // createData(3,'Amazon', 262, 16.0, false),
+    // createData(4,'eBay', 305, 3.7, false),
+    // createData(5,'Shopify', 356, 16.0, false),
   ];
 
 
@@ -70,6 +73,8 @@ export default function CustomizedTables() {
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
+            
+            <StyledTableCell>ID</StyledTableCell>
             <StyledTableCell>Retailer Name</StyledTableCell>
             <StyledTableCell align="right">Customer Id</StyledTableCell>
             <StyledTableCell align="right">Recipt Id</StyledTableCell>
@@ -80,9 +85,8 @@ export default function CustomizedTables() {
         <TableBody>
           {rows.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.RetailerName}
-              </StyledTableCell>
+               <StyledTableCell align="right">{row.id}</StyledTableCell>
+              <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
               <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
               <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>
               <StyledTableCell align="right" onClick={() => {
