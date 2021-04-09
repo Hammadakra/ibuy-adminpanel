@@ -71,7 +71,7 @@ export default function CustomizedTables() {
     }
     ,[])
 
-    console.log(tabledata);
+    // console.log("From Database",tabledata[upIndex]);
   function createData(id,RetailerName, CustomerId, ReciptId, status) {
     
     return {id, RetailerName, CustomerId, ReciptId, status };
@@ -82,22 +82,33 @@ export default function CustomizedTables() {
   const [selectedRow,setSelectedRow] = useState(false); 
   const [upIndex,setUpIndex] =useState(currentRecord?.id);   
   const [Approve ,setApprove] = useState();
-  //   console.log("aa",upIndex)
+    //  console.log("aa",upIndex,rows[0]?.id)
   //   console.log("Current RE",currentRecord)
   //   console.log("adsada",currentRecord?.id)
-
+  // console.log(tabledata[0]?.team1.id)
+  // createData(0,"walmart", 159, 6.0, false),
   
-  const rows = [
-    
-    createData(0,"walmart", 159, 6.0, false),
+  const rows = 
+    tabledata.map((row) => (
+      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
+      ))
+  
+      console.log("The Complete Database",tabledata)
     //, <a onClick ={() => setnewRec(!newRec)}>New </a>  ,),
-    createData(1,'Metro', 237, 9.0, false),//<a onClick ={() => setnewRec(!newRec)}>New </a> ),
-     createData(2,'Amazon', 262, 16.0, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-     createData(3,'eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-     createData(4,'Shopify', 356, 16.0, false),// <a >New</a>),
-  ];
+    //createData(1,'Metro', 237, 9.0, false),//<a onClick ={() => setnewRec(!newRec)}>New </a> ),
+     //createData(2,'Amazon', 262, 16.0, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
+     //createData(3,'eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
+     //createData(4,'Shopify', 356, 16.0, false),// <a >New</a>),
+  ;
 
-
+  const sentToApprove=()=>
+  {
+    
+    //  localStorage.clear();
+    const storedArr = localStorage.getItem("appArr")
+    const approvedArr = JSON.parse(storedArr) || [];
+    localStorage.setItem("appArr", JSON.stringify([...approvedArr, tabledata[upIndex-1]]));
+  }
  
 const CurrentState = () => 
   {
@@ -116,6 +127,7 @@ const incre=()=>
 setUpIndex(upIndex+1)
   }
 
+  console.log("selected row",currentRecord,upIndex)
 
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
@@ -192,7 +204,7 @@ setUpIndex(upIndex+1)
             required
             id="outlined-required"
             label="Retailer Name"
-            value={rows[upIndex]?.RetailerName}
+            value={tabledata[upIndex-1]?.team1.id}
             variant="outlined"
           />
           <br></br>
@@ -244,7 +256,10 @@ setUpIndex(upIndex+1)
   
     <div className="buttons">
     <div className= 'HomeNext' >
-          <button type="button" class="btn btn-success" name="button" onClick={() => setApprove(rows[upIndex])}>Approve </button>
+          <button type="button" class="btn btn-success" name="button" 
+          
+          onClick ={ () => sentToApprove(tabledata)}>Approve </button>
+
           <button type="button" class="btn btn-red" name="button" >Reject </button>
         </div>
     
