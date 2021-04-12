@@ -88,6 +88,7 @@ console.log("app Data",appdata)
           {rows?.map((row) => (
             <StyledTableRow key={row.name}>
                <StyledTableCell align="right">{row.id}</StyledTableCell>
+               
               <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
               <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
               <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>

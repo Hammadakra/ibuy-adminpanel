@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,6 +11,7 @@ import './style.css'
 // import ReciptAppRej from './ReciptAppRej'
 import { SettingsInputAntenna } from '@material-ui/icons';
 import ReciptAppRej from '../ReciptAppRej/ReciptAppRej';
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -37,39 +38,42 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTables() {
+export default function RejectRecipt(props) {
   const classes = useStyles();
-  function createData(RetailerName, CustomerId, ReciptId, status) {
-    
-    return { RetailerName, CustomerId, ReciptId, status };
+  const [appdata,setappdata]=useState();
+   const {ApproveRow}  = props;
+  var ApprovedRows=JSON.parse( localStorage.getItem('appArr'))
+console.log("The Data storage data",ApprovedRows)
+
+useEffect(()=>{
+setappdata(ApprovedRows)
+},[])
+console.log("app Data",appdata)
+  function createData(id,RetailerName, CustomerId, ReciptId, status) {  
+    return { id,RetailerName, CustomerId, ReciptId, status };
   }
+
   const [newRec,setnewRec] = useState(false);
   const [currentRecord, setCurrentRecord] = useState();
-  
-  {
+  console.log("In Approved",ApproveRow)
 
-  }
-
-  const rows = [
-    createData('Walmart', 159, 6.0, false),//, <a onClick ={() => setnewRec(!newRec)}>New </a>  ,),
-    createData('Metro', 237, 9.0, false),//<a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('Amazon', 262, 16.0, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
-    createData('Shopify', 356, 16.0, false),// <a >New</a>),
-  ];
-
-
+  const rows = 
+  appdata?.map((row) => (
+      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
+      ))
     if (newRec)
     {  
     const selected = rows.find(r => r.status);
     console.log("Hello",selected.RetailerName,selected.CustomerId,selected.ReciptId,selected.status);
     }
   return ( <div className='container'>
-      <h1 style={{textAlign:"center"}}>Rejected Recipt</h1>
+      <h1 style={{textAlign:"center"}}>APPROVED RECIPT</h1>
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
+            
+            <StyledTableCell>ID</StyledTableCell>
             <StyledTableCell>Retailer Name</StyledTableCell>
             <StyledTableCell align="right">Customer Id</StyledTableCell>
             <StyledTableCell align="right">Recipt Id</StyledTableCell>
@@ -78,11 +82,10 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows?.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.RetailerName}
-              </StyledTableCell>
+               <StyledTableCell align="right">{row.id}</StyledTableCell>
+              <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
               <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
               <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>
               <StyledTableCell align="right" onClick={() => {

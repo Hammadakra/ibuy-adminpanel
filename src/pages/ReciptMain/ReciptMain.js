@@ -34,6 +34,17 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
+  // const userRef = db.collection('ApprovedRecipt').add({
+  //   id: tabledata?[0].team1.id,
+  //   CustomerId: tabledata?[0].team1.CustomerName
+  // });  
+  // setState({
+  //   id: '',
+  //   CustomerId: '',
+  //   CustomerName: '',
+  //   ReciptId, ' '
+  // });
+
 
 
 const useStyles = makeStyles({
@@ -90,25 +101,26 @@ export default function CustomizedTables() {
   
   const rows = 
     tabledata.map((row) => (
-      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
+      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId)
       ))
   
-      console.log("The Complete Database",tabledata)
+      // console.log("The Complete Database",tabledata)
     //, <a onClick ={() => setnewRec(!newRec)}>New </a>  ,),
     //createData(1,'Metro', 237, 9.0, false),//<a onClick ={() => setnewRec(!newRec)}>New </a> ),
      //createData(2,'Amazon', 262, 16.0, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
      //createData(3,'eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
      //createData(4,'Shopify', 356, 16.0, false),// <a >New</a>),
   ;
-
+console.log("sss sel",selectedRow?.id);
+console.log("sss",rows[0]?.id)
   const sentToApprove=()=>
   {
     
-    //  localStorage.clear();
+     // localStorage.clear();
     const storedArr = localStorage.getItem("appArr")
     const approvedArr = JSON.parse(storedArr) || [];
     localStorage.setItem("appArr", JSON.stringify([...approvedArr, tabledata[upIndex-1]]));
-  }
+   }
  
 const CurrentState = () => 
   {
@@ -127,10 +139,42 @@ const incre=()=>
 setUpIndex(upIndex+1)
   }
 
-  console.log("selected row",currentRecord,upIndex)
+   console.log("Updata Index",)
+
+
+const deleteRow = () => 
+{
+  db.collection("ApprovedRecipt").doc(rows[upIndex-1]?.ReciptId).delete().then(() => {
+    console.log("Document successfully deleted!");
+}).catch((error) => {
+    console.error("Error removing document: ", error);
+});
+}
+
+
+
+   const add = () =>{
+    
+    db.collection("ApprovedRecipt").doc(rows[upIndex-1]?.ReciptId).set({
+      id: rows[upIndex-1]?.id,
+      CustomerName: rows[upIndex-1]?.RetailerName,
+      ReciptId: rows[upIndex-1]?.ReciptId,
+      CustomerId: rows[upIndex-1]?.CustomerId,
+      
+    })
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+    }
+    
+
 
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
+      <button onClick={deleteRow}>Click to Delete</button>
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
@@ -144,7 +188,7 @@ setUpIndex(upIndex+1)
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.filter(row => row.id !==selectedRow.id).map((row) => (
             <StyledTableRow key={row.name}>
 
             
@@ -161,7 +205,7 @@ setUpIndex(upIndex+1)
               <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
               <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>
               {/* <StyledTableCell align="right" onClick ={ () => setCurrentRecord(row)} */}
-                <StyledTableCell align="right" onClick ={ () => givemedata(row,row.id)}
+            <StyledTableCell align="right" onClick ={ () => givemedata(row,row.id)}
             >New</StyledTableCell>
           
             </StyledTableRow>
@@ -195,16 +239,16 @@ setUpIndex(upIndex+1)
         <div className='FormData'>
           <TextField 
             required
-            label="Customer Id"
+            // label="Customer Id"
             id="outlined-required"
-            value={rows[upIndex]?.CustomerId}
+            value={rows[upIndex-1]?.CustomerId}
             variant="outlined"
           />
           <TextField
             required
             id="outlined-required"
-            label="Retailer Name"
-            value={tabledata[upIndex-1]?.team1.id}
+            // label="Retailer Name"
+            value={rows[upIndex-1]?.RetailerName}
             variant="outlined"
           />
           <br></br>
@@ -258,14 +302,14 @@ setUpIndex(upIndex+1)
     <div className= 'HomeNext' >
           <button type="button" class="btn btn-success" name="button" 
           
-          onClick ={ () => sentToApprove(tabledata)}>Approve </button>
+          onClick ={add}>Approve </button>
 
           <button type="button" class="btn btn-red" name="button" >Reject </button>
         </div>
     
   
         <div className= 'HomeNext' >
-          <button type="button" class="btn btn-primary" name="button">Home</button>
+          <button type="button" class="btn btn-primary" name="button" onClick={ ()=>setUpIndex(1) }>Home</button>
           <button type="button" class="btn btn-primary" name="button" onClick= {incre} >next</button>
         </div>
     </div>      

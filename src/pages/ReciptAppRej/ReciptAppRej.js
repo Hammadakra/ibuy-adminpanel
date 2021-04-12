@@ -40,8 +40,8 @@ export default function ReciptAppRej(props) {
   const classes = useStyles();
   const { Allrow } = props;
    const {row} = props;
-    console.log("Only Selected row",row);
-    console.log('All Object of Table', Allrow)
+    // console.log("Only Selected row",row);
+    // console.log('All Object of Table', Allrow)
 
     // const [currentIndex,setCurrentIndex] = useState(row.id);
     
@@ -54,14 +54,14 @@ export default function ReciptAppRej(props) {
 
     const [app ,setApp] = useState();
     const [upIndex,setUpIndex] =useState(row.id);
-     console.log("dass",upIndex);
+    //  console.log("dass",upIndex);
     // const nextIndex = () =>
     // {
     //   currentIndex=currentIndex+1;
     // }
 
     // console.log("Data from OutSide the function",row[count]);
-  
+  // console.log("My All row",Allrow)
   return (
     <div className='mainContainer'>
         
@@ -140,12 +140,12 @@ export default function ReciptAppRej(props) {
   <div className="buttons">
   <div className= 'HomeNext' >
         <button type="button" class="btn btn-success" name="button" onClick={() => setApp(row)}>Approve </button>
-        <button type="button" class="btn btn-red" name="button" >Reject </button>
+        <button type="button" class="btn btn-red" name="button"  onClick={() => setApp(row)}>Reject </button>
       </div>
   
 
       <div className= 'HomeNext' >
-        <button type="button" class="btn btn-primary" name="button">Home</button>
+        <button type="button" class="btn btn-primary" name="button" onClick={() => setUpIndex(0) } >Home</button>
         <button type="button" class="btn btn-primary" name="button" onClick={() => setUpIndex(upIndex+1) } >next</button>
       </div>
   </div>      
