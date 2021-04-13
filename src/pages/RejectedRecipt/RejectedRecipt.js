@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import './style.css'
 // import ReciptAppRej from './ReciptAppRej'
+import db from '../../Firebase/Firebase'
 import { SettingsInputAntenna } from '@material-ui/icons';
 import ReciptAppRej from '../ReciptAppRej/ReciptAppRej';
 
@@ -41,24 +42,41 @@ const useStyles = makeStyles({
 export default function RejectRecipt(props) {
   const classes = useStyles();
   const [appdata,setappdata]=useState();
-   const {ApproveRow}  = props;
-  var ApprovedRows=JSON.parse( localStorage.getItem('appArr'))
-console.log("The Data storage data",ApprovedRows)
-
+  const [tabledata,settabledata] = useState([])
+//    const {ApproveRow}  = props;
+//   var ApprovedRows=JSON.parse( localStorage.getItem('appArr'))
+// console.log("The Data storage data",ApprovedRows)
 useEffect(()=>{
-setappdata(ApprovedRows)
-},[])
-console.log("app Data",appdata)
+  db.collection("RejectRecipt")
+    // .orderBy("date")
+    // .limit(10)
+    .get()
+    .then(querySnapshot => {
+      const Matches = [];
+      querySnapshot.forEach(function(doc) {
+        Matches.push({
+          team1: doc.data(),
+        });
+      });
+  
+      settabledata(Matches);
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
+    });
+  }
+  ,[])
+// console.log("app Data",appdata)
   function createData(id,RetailerName, CustomerId, ReciptId, status) {  
     return { id,RetailerName, CustomerId, ReciptId, status };
   }
 
   const [newRec,setnewRec] = useState(false);
   const [currentRecord, setCurrentRecord] = useState();
-  console.log("In Approved",ApproveRow)
+  // console.log("In Approved",ApproveRow)
 
   const rows = 
-  appdata?.map((row) => (
+  tabledata?.map((row) => (
       createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
       ))
     if (newRec)
@@ -67,7 +85,7 @@ console.log("app Data",appdata)
     console.log("Hello",selected.RetailerName,selected.CustomerId,selected.ReciptId,selected.status);
     }
   return ( <div className='container'>
-      <h1 style={{textAlign:"center"}}>APPROVED RECIPT</h1>
+      <h1 style={{textAlign:"center"}}>REJECTED RECIPT</h1>
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>

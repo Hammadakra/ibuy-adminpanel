@@ -54,7 +54,7 @@ export default function Homepage() {
   const history=useHistory();
   const [email,setEmail]=useState();
   const [password,setPassword]=useState();
-  
+  const [userId,setuserId] = useState();
   console.log(email,password);
   
   const loginauth=(e)=>{
@@ -72,6 +72,7 @@ export default function Homepage() {
     alert("Entred Invalid Info");
   });
 }
+
   return (
       <div className ="homepagecontainer">
           <div className="homepage-mainheadeing">

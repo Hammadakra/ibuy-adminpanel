@@ -64,13 +64,9 @@ export default function CustomizedTables() {
       .get()
       .then(querySnapshot => {
         const Matches = [];
-    
         querySnapshot.forEach(function(doc) {
           Matches.push({
             team1: doc.data(),
-            // team2: doc.data(),
-            // winner: doc.data().winner,
-            // date: doc.data().date
           });
         });
     
@@ -81,8 +77,7 @@ export default function CustomizedTables() {
       });
     }
     ,[])
-
-    // console.log("From Database",tabledata[upIndex]);
+              
   function createData(id,RetailerName, CustomerId, ReciptId, status) {
     
     return {id, RetailerName, CustomerId, ReciptId, status };
@@ -170,7 +165,23 @@ const deleteRow = () =>
     });
     }
     
-
+    const RejectReciptAdd= () =>{
+    
+      db.collection("RejectRecipt").doc(rows[upIndex-1]?.ReciptId).set({
+        id: rows[upIndex-1]?.id,
+        CustomerName: rows[upIndex-1]?.RetailerName,
+        ReciptId: rows[upIndex-1]?.ReciptId,
+        CustomerId: rows[upIndex-1]?.CustomerId,
+        
+      })
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+      }
+      
 
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
@@ -302,9 +313,9 @@ const deleteRow = () =>
     <div className= 'HomeNext' >
           <button type="button" class="btn btn-success" name="button" 
           
-          onClick ={add}>Approve </button>
+          onClick ={()=> {add() ; deleteRow()} }>Approve </button>
 
-          <button type="button" class="btn btn-red" name="button" >Reject </button>
+          <button type="button" class="btn btn-red" name="button" onClick={RejectReciptAdd}>Reject </button>
         </div>
     
   
