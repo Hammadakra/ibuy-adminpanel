@@ -76,8 +76,8 @@ useEffect(()=>{
   // console.log("In Approved",ApproveRow)
 
   const rows = 
-  tabledata?.map((row) => (
-      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
+  tabledata?.map((row,i) => (
+      createData(i,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
       ))
     if (newRec)
     {  
@@ -102,7 +102,7 @@ useEffect(()=>{
         <TableBody>
           {rows?.map((row) => (
             <StyledTableRow key={row.name}>
-               <StyledTableCell align="right">{row.id}</StyledTableCell>
+               <StyledTableCell >{row.id}</StyledTableCell>
               <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
               <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
               <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>

@@ -57,26 +57,28 @@ export default function CustomizedTables() {
   const classes = useStyles();
   const [tabledata,settabledata] = useState([])
 
-  useEffect(()=>{
-    db.collection("Recipt")
-      // .orderBy("date")
-      // .limit(10)
-      .get()
-      .then(querySnapshot => {
-        const Matches = [];
-        querySnapshot.forEach(function(doc) {
-          Matches.push({
-            team1: doc.data(),
-          });
-        });
-    
-        settabledata(Matches);
-      })
-      .catch(function(error) {
-        console.log("Error getting documents: ", error);
+const fetchdata=()=>{
+  db.collection("Recipt")
+  .get()
+  .then(querySnapshot => {
+    const Matches = [];
+    querySnapshot.forEach(function(doc) {
+      Matches.push({
+        team1: doc.data(),
       });
-    }
-    ,[])
+    });
+
+    settabledata(Matches);
+  })
+  .catch(function(error) {
+    console.log("Error getting documents: ", error);
+  });
+}
+
+
+  useEffect(()=>{
+  fetchdata()
+  },[])
               
   function createData(id,RetailerName, CustomerId, ReciptId, status) {
     
@@ -88,6 +90,10 @@ export default function CustomizedTables() {
   const [selectedRow,setSelectedRow] = useState(false); 
   const [upIndex,setUpIndex] =useState(currentRecord?.id);   
   const [Approve ,setApprove] = useState();
+  const [RetailerName,setRetailerName] = useState()
+  const [lastFourDigit,setLastFourDigit] = useState();
+  const [totalSpend,setTotalSpend] = useState();
+  const [transactionDate,setTransactionDate] = useState()
     //  console.log("aa",upIndex,rows[0]?.id)
   //   console.log("Current RE",currentRecord)
   //   console.log("adsada",currentRecord?.id)
@@ -95,8 +101,8 @@ export default function CustomizedTables() {
   // createData(0,"walmart", 159, 6.0, false),
   
   const rows = 
-    tabledata.map((row) => (
-      createData(row?.team1.id,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId)
+    tabledata.map((row,i) => (
+      createData(i,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId)
       ))
   
       // console.log("The Complete Database",tabledata)
@@ -108,15 +114,18 @@ export default function CustomizedTables() {
   ;
 console.log("sss sel",selectedRow?.id);
 console.log("sss",rows[0]?.id)
-  const sentToApprove=()=>
-  {
+console.log("my NEW ROW ID",upIndex)
+  // const sentToApprove=()=>
+  // {
     
-     // localStorage.clear();
-    const storedArr = localStorage.getItem("appArr")
-    const approvedArr = JSON.parse(storedArr) || [];
-    localStorage.setItem("appArr", JSON.stringify([...approvedArr, tabledata[upIndex-1]]));
-   }
+  //    // localStorage.clear();
+  //   const storedArr = localStorage.getItem("appArr")
+  //   const approvedArr = JSON.parse(storedArr) || [];
+  //   localStorage.setItem("appArr", JSON.stringify([...approvedArr, tabledata[upIndex-1]]));
+  //  }
  
+
+
 const CurrentState = () => 
   {
     setnewRec(!newRec);    
@@ -134,27 +143,28 @@ const incre=()=>
 setUpIndex(upIndex+1)
   }
 
-   console.log("Updata Index",)
+   
 
 
 const deleteRow = () => 
 {
-  db.collection("ApprovedRecipt").doc(rows[upIndex-1]?.ReciptId).delete().then(() => {
+  db.collection("Recipt").doc(rows[upIndex]?.ReciptId).delete().then(() => {
     console.log("Document successfully deleted!");
 }).catch((error) => {
     console.error("Error removing document: ", error);
 });
+fetchdata()
 }
 
 
 
-   const add = () =>{
+   const ApprovedReciptAdd = () =>{
     
-    db.collection("ApprovedRecipt").doc(rows[upIndex-1]?.ReciptId).set({
-      id: rows[upIndex-1]?.id,
-      CustomerName: rows[upIndex-1]?.RetailerName,
-      ReciptId: rows[upIndex-1]?.ReciptId,
-      CustomerId: rows[upIndex-1]?.CustomerId,
+    db.collection("ApprovedRecipt").doc(rows[upIndex]?.ReciptId).set({
+      id: rows[upIndex]?.id,
+      CustomerName: rows[upIndex]?.RetailerName,
+      ReciptId: rows[upIndex]?.ReciptId,
+      CustomerId: rows[upIndex]?.CustomerId,
       
     })
     .then((docRef) => {
@@ -167,11 +177,11 @@ const deleteRow = () =>
     
     const RejectReciptAdd= () =>{
     
-      db.collection("RejectRecipt").doc(rows[upIndex-1]?.ReciptId).set({
-        id: rows[upIndex-1]?.id,
-        CustomerName: rows[upIndex-1]?.RetailerName,
-        ReciptId: rows[upIndex-1]?.ReciptId,
-        CustomerId: rows[upIndex-1]?.CustomerId,
+      db.collection("RejectRecipt").doc(rows[upIndex]?.ReciptId).set({
+        id: rows[upIndex]?.id,
+        CustomerName: rows[upIndex]?.RetailerName,
+        ReciptId: rows[upIndex]?.ReciptId,
+        CustomerId: rows[upIndex]?.CustomerId,
         
       })
       .then((docRef) => {
@@ -181,11 +191,11 @@ const deleteRow = () =>
         console.error("Error adding document: ", error);
       });
       }
-      
+      console.log("The length of Index",rows[upIndex]?.RetailerName.length)
 
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
-      <button onClick={deleteRow}>Click to Delete</button>
+
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
@@ -196,10 +206,11 @@ const deleteRow = () =>
             <StyledTableCell align="right">Recipt Id</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
            
+          
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.filter(row => row.id !==selectedRow.id).map((row) => (
+          {rows.map((row) => (
             <StyledTableRow key={row.name}>
 
             
@@ -230,9 +241,6 @@ const deleteRow = () =>
     
     {/* {currentRecord ? <ReciptAppRej  Allrow = {rows} row ={currentRecord} />:""} */}
 
-
-          
-
             <div>
 
             <div className='mainContainer'>
@@ -246,20 +254,24 @@ const deleteRow = () =>
       <h1 style={{textAlign:'center'}}>Recipt Information</h1>
         <div className='subSquare'>
         <div class="content">
-  
+            <form>
         <div className='FormData'>
           <TextField 
             required
-            // label="Customer Id"
+            label="Customer Id"
             id="outlined-required"
-            value={rows[upIndex-1]?.CustomerId}
+            defaultValue="CustomerId"
+            value={rows[upIndex]?.CustomerId}
             variant="outlined"
           />
           <TextField
             required
             id="outlined-required"
-            // label="Retailer Name"
-            value={rows[upIndex-1]?.RetailerName}
+            label="Required"
+            defaultValue="Retailer Name"
+            variant="outlined"
+            value={rows[upIndex]?.RetailerName}
+            
             variant="outlined"
           />
           <br></br>
@@ -269,16 +281,21 @@ const deleteRow = () =>
             required
             id="outlined-required"
             label="Required"
-            defaultValue="Transaction Date"
+            defaultValue='Transaction Data'
+            value={transactionDate}
             variant="outlined"
+            onChange={(e)=>setTransactionDate(e.target.value)}
+          
           />
         
           <TextField
             required
             id="outlined-required"
             label="Required"
-            defaultValue="Total Spend"
+            defaultValue='Total Spend'
+            value={totalSpend}
             variant="outlined"
+            onChange={(e)=>setTotalSpend(e.target.value)}
           />
           <br></br>
           <br></br>
@@ -287,8 +304,10 @@ const deleteRow = () =>
             required
             id="outlined-required"
             label="Required"
-            defaultValue="Last 4 digits"
+            defaultValue="Last 4 Digit"
+            value={lastFourDigit}
             variant="outlined"
+            onChange={(e)=>setLastFourDigit(e.target.value)}
           />
             
           <TextField
@@ -297,9 +316,10 @@ const deleteRow = () =>
             label="Required"
             defaultValue="Retailer Name"
             variant="outlined"
+            value={rows[upIndex]?.RetailerName}
           />
         </div>
-       
+        </form>
     </div>
   
          <div className="ReciptPic" >
@@ -311,16 +331,22 @@ const deleteRow = () =>
   
     <div className="buttons">
     <div className= 'HomeNext' >
-          <button type="button" class="btn btn-success" name="button" 
-          
-          onClick ={()=> {add() ; deleteRow()} }>Approve </button>
 
-          <button type="button" class="btn btn-red" name="button" onClick={RejectReciptAdd}>Reject </button>
+      { lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.RetailerName.length > 0?
+      (
+          <button type="button" class="btn btn-success" name="button"
+          onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } > Approve </button>)
+
+          :
+          (   <button type="button" disabled class="btn btn-success" name="button" 
+          onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } >Approve </button>)}
+
+          <button type="button" class="btn btn-red" name="button"  onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>
         </div>
     
   
         <div className= 'HomeNext' >
-          <button type="button" class="btn btn-primary" name="button" onClick={ ()=>setUpIndex(1) }>Home</button>
+          <button type="button" class="btn btn-primary" name="button" onClick={ ()=>setUpIndex(0) }>Home</button>
           <button type="button" class="btn btn-primary" name="button" onClick= {incre} >next</button>
         </div>
     </div>      

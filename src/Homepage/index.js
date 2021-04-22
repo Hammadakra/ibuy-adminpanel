@@ -63,7 +63,12 @@ export default function Homepage() {
     .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    console.log("login success",user)
+    localStorage.setItem("id",user.uid)
+    console.log("login success",user.uid)
+    localStorage.setItem("id",user.uid)
+    localStorage.setItem("key",true)
+    history.push("/ReciptMain")
+    window.location.reload();
     // ...
   })
   .catch((error) => {
@@ -72,7 +77,7 @@ export default function Homepage() {
     alert("Entred Invalid Info");
   });
 }
-
+  
   return (
       <div className ="homepagecontainer">
           <div className="homepage-mainheadeing">

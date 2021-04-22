@@ -13,8 +13,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import store from '../../assets/images/admin.jpg'
-import './Signup.css';
 import {useHistory} from 'react-router-dom';
+import './Signup.css';
+// import {useHistory} from 'react-router-dom';
 import {auth} from './../../Firebase/Firebase';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,6 +69,9 @@ auth.createUserWithEmailAndPassword(email, password)
     // Signed in 
     var user = userCredential.user;
     console.log("user",user)
+    history.push('/')
+    window.location.reload(true);
+ 
     // ...
   })
   .catch((error) => {
@@ -147,7 +151,7 @@ else{
               autoComplete="current-password"
               onChange={(e)=>setConfirmpassword(e.target.value)}
             />
-            {passwordreerror &&<p style={{color:"red"}}>{passwordreerror}</p>}
+            {passwordreerror && <p style={{color:"red"}}>{passwordreerror}</p>}
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -158,6 +162,7 @@ else{
               variant="contained"
               color="primary"
               className={classes.submit}
+            
             >
               Sign up
             </Button>
