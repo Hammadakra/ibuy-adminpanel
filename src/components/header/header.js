@@ -57,7 +57,7 @@ render() {
         
 
         <MDBNavItem activeClassName='active' >
-        <MDBNavLink className="Recipt" to="">Recipts</MDBNavLink>
+        <MDBNavLink className="Recipt" to="./ReciptMain">Recipts</MDBNavLink>
             </MDBNavItem></MDBDropdownToggle> 
     <MDBDropdownMenu>
       <MDBDropdownItem >
@@ -101,7 +101,7 @@ render() {
       
          
           </MDBNavbarNav>
-          <MDBNavbarNav center >
+          <MDBNavbarNav left >
           <MDBNavItem activeClassName="actives">
               <MDBNavLink className="MAINHEAD" to="./">IBUY ADMIN APP</MDBNavLink>
             </MDBNavItem>

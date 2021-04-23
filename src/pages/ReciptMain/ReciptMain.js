@@ -260,16 +260,18 @@ fetchdata()
             required
             label="Customer Id"
             id="outlined-required"
-            defaultValue="CustomerId"
+            // defaultValue="CustomerId"
+            defaultValue={0}
             value={rows[upIndex]?.CustomerId}
             variant="outlined"
           />
           <TextField
             required
             id="outlined-required"
-            label="Required"
-            defaultValue="Retailer Name"
+            label="Retailer Name"
+            // defaultValue="Retailer Name"
             variant="outlined"
+            defaultValue="none"
             value={rows[upIndex]?.RetailerName}
             
             variant="outlined"
@@ -280,8 +282,8 @@ fetchdata()
           <TextField
             required
             id="outlined-required"
-            label="Required"
-            defaultValue='Transaction Data'
+            label="Transaction Date"
+            // defaultValue='Transaction Date'
             value={transactionDate}
             variant="outlined"
             onChange={(e)=>setTransactionDate(e.target.value)}
@@ -341,7 +343,11 @@ fetchdata()
           (   <button type="button" disabled class="btn btn-success" name="button" 
           onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } >Approve </button>)}
 
-          <button type="button" class="btn btn-red" name="button"  onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>
+
+
+
+{  lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.RetailerName.length > 0?
+         ( <button   type="button" class="btn btn-red" name="button"  onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>):(   <button  type="button" class="btn btn-red" name="button"  disabled onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>)}
         </div>
     
   
