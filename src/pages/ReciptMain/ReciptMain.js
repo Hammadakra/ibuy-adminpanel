@@ -8,7 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import './style.css';
-import rec from '../../assets/images/rec.PNG';
+// import rec from '../../assets/images/rec.PNG';
+// import rec from '../../assets/images/rec.PNG';
+
 import ApproveRecipt from '../ApprovedRecipt/ApproveRecipt';
 import TextField from '@material-ui/core/TextField';
 import { AndroidSharp, SettingsInputAntenna } from '@material-ui/icons';
@@ -58,15 +60,17 @@ export default function CustomizedTables() {
   const [tabledata,settabledata] = useState([])
 
 const fetchdata=()=>{
-  db.collection("Recipt")
+  db.collection("userData").doc('j0lixUNEYZgqT1EufdlbMEoKXG12').collection("url")
   .get()
   .then(querySnapshot => {
     const Matches = [];
+
     querySnapshot.forEach(function(doc) {
       Matches.push({
         team1: doc.data(),
       });
     });
+    console.log("Data FROM ADMIN",Matches,querySnapshot)
 
     settabledata(Matches);
   })
@@ -80,9 +84,9 @@ const fetchdata=()=>{
   fetchdata()
   },[])
               
-  function createData(id,RetailerName, CustomerId, ReciptId, status) {
+  function createData(id,retailerName, CustomerId, ReciptId,imageUrl, status) {
     
-    return {id, RetailerName, CustomerId, ReciptId, status };
+    return {id, retailerName, CustomerId, ReciptId, imageUrl,status };
   }
 
   const [newRec,setnewRec] = useState(false);
@@ -93,7 +97,8 @@ const fetchdata=()=>{
   const [RetailerName,setRetailerName] = useState()
   const [lastFourDigit,setLastFourDigit] = useState();
   const [totalSpend,setTotalSpend] = useState();
-  const [transactionDate,setTransactionDate] = useState()
+  const [transactionDate,setTransactionDate] = useState();
+  const [imageURL ,setImageURL] = useState();
     //  console.log("aa",upIndex,rows[0]?.id)
   //   console.log("Current RE",currentRecord)
   //   console.log("adsada",currentRecord?.id)
@@ -102,7 +107,8 @@ const fetchdata=()=>{
   
   const rows = 
     tabledata.map((row,i) => (
-      createData(i,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId)
+      createData(i,row?.team1.retailerName,row?.team1.CustomerId, row?.team1.ReciptId,row?.team1.imageUrl)
+      
       ))
   
       // console.log("The Complete Database",tabledata)
@@ -112,9 +118,8 @@ const fetchdata=()=>{
      //createData(3,'eBay', 305, 3.7, false),// <a onClick ={() => setnewRec(!newRec)}>New </a> ),
      //createData(4,'Shopify', 356, 16.0, false),// <a >New</a>),
   ;
-console.log("sss sel",selectedRow?.id);
-console.log("sss",rows[0]?.id)
-console.log("my NEW ROW ID",upIndex)
+
+  console.log(rows)
   // const sentToApprove=()=>
   // {
     
@@ -162,7 +167,7 @@ fetchdata()
     
     db.collection("ApprovedRecipt").doc(rows[upIndex]?.ReciptId).set({
       id: rows[upIndex]?.id,
-      CustomerName: rows[upIndex]?.RetailerName,
+      CustomerName: rows[upIndex]?.retailerName,
       ReciptId: rows[upIndex]?.ReciptId,
       CustomerId: rows[upIndex]?.CustomerId,
       
@@ -174,12 +179,12 @@ fetchdata()
       console.error("Error adding document: ", error);
     });
     }
-    
+    // const image = rows?.team1.imageUrl;
     const RejectReciptAdd= () =>{
     
       db.collection("RejectRecipt").doc(rows[upIndex]?.ReciptId).set({
         id: rows[upIndex]?.id,
-        CustomerName: rows[upIndex]?.RetailerName,
+        CustomerName: rows[upIndex]?.retailerName,
         ReciptId: rows[upIndex]?.ReciptId,
         CustomerId: rows[upIndex]?.CustomerId,
         
@@ -191,7 +196,7 @@ fetchdata()
         console.error("Error adding document: ", error);
       });
       }
-      console.log("The length of Index",rows[upIndex]?.RetailerName.length)
+      // console.log("The length of Index",rows[upIndex]?.RetailerName.length)
 
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
@@ -220,7 +225,7 @@ fetchdata()
             
 
               <StyledTableCell component="th" scope="row">
-                {row.RetailerName}
+                {row.retailerName}
               </StyledTableCell>
             
               
@@ -237,7 +242,8 @@ fetchdata()
       
     </TableContainer>
 
-    <p>{rows.RetailerName}</p>
+
+    
     
     {/* {currentRecord ? <ReciptAppRej  Allrow = {rows} row ={currentRecord} />:""} */}
 
@@ -261,7 +267,7 @@ fetchdata()
             label="Customer Id"
             id="outlined-required"
             // defaultValue="CustomerId"
-            defaultValue={0}
+            defaultValue={3000}
             value={rows[upIndex]?.CustomerId}
             variant="outlined"
           />
@@ -272,7 +278,7 @@ fetchdata()
             // defaultValue="Retailer Name"
             variant="outlined"
             defaultValue="none"
-            value={rows[upIndex]?.RetailerName}
+            value={rows[upIndex]?.retailerName}
             
             variant="outlined"
           />
@@ -318,14 +324,14 @@ fetchdata()
             label="Required"
             defaultValue="Retailer Name"
             variant="outlined"
-            value={rows[upIndex]?.RetailerName}
+            // value={rows[upIndex]?.RetailerName}
           />
         </div>
         </form>
     </div>
   
          <div className="ReciptPic" >
-          <img src={rec}/>
+          <img src={rows[upIndex]?.imageUrl}/>
          </div>
         </div>
   
@@ -334,7 +340,7 @@ fetchdata()
     <div className="buttons">
     <div className= 'HomeNext' >
 
-      { lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.RetailerName.length > 0?
+      { lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.retailerName.length > 0?
       (
           <button type="button" class="btn btn-success" name="button"
           onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } > Approve </button>)
@@ -346,7 +352,7 @@ fetchdata()
 
 
 
-{  lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.RetailerName.length > 0?
+{  lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.rtailerName.length > 0?
          ( <button   type="button" class="btn btn-red" name="button"  onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>):(   <button  type="button" class="btn btn-red" name="button"  disabled onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>)}
         </div>
     
