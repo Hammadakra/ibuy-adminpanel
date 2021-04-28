@@ -67,8 +67,8 @@ useEffect(()=>{
   }
   ,[])
 // console.log("app Data",appdata)
-  function createData(id,RetailerName, CustomerId, ReciptId, status) {  
-    return { id,RetailerName, CustomerId, ReciptId, status };
+  function createData(id,RetailerName, customerID, receiptID, status) {  
+    return { id,RetailerName, customerID, receiptID, status };
   }
 
   const [newRec,setnewRec] = useState(false);
@@ -77,7 +77,7 @@ useEffect(()=>{
 
   const rows = 
   tabledata?.map((row,i) => (
-      createData(i,row?.team1.CustomerName,row?.team1.CustomerId, row?.team1.ReciptId,false)
+      createData(i,row?.team1.CustomerName,row?.team1.customerID, row?.team1.receiptID,false)
       ))
     if (newRec)
     {  
@@ -104,8 +104,8 @@ useEffect(()=>{
             <StyledTableRow key={row.name}>
                <StyledTableCell >{row.id}</StyledTableCell>
               <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
-              <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
-              <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>
+              <StyledTableCell align="right">{row.customerID}</StyledTableCell>
+              <StyledTableCell align="right">{row.receiptID}</StyledTableCell>
               <StyledTableCell align="right" onClick={() => {
                 setCurrentRecord(row);
               }}>Reject</StyledTableCell>

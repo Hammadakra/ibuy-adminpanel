@@ -60,7 +60,7 @@ export default function CustomizedTables() {
   const [tabledata,settabledata] = useState([])
 
 const fetchdata=()=>{
-  db.collection("userData").doc('j0lixUNEYZgqT1EufdlbMEoKXG12').collection("url")
+  db.collection("admin")
   .get()
   .then(querySnapshot => {
     const Matches = [];
@@ -84,9 +84,9 @@ const fetchdata=()=>{
   fetchdata()
   },[])
               
-  function createData(id,retailerName, CustomerId, ReciptId,imageUrl, status) {
+  function createData(id,retailerName, customerID, receiptID,imageUrl, status) {
     
-    return {id, retailerName, CustomerId, ReciptId, imageUrl,status };
+    return {id, retailerName, customerID, receiptID, imageUrl,status };
   }
 
   const [newRec,setnewRec] = useState(false);
@@ -107,7 +107,7 @@ const fetchdata=()=>{
   
   const rows = 
     tabledata.map((row,i) => (
-      createData(i,row?.team1.retailerName,row?.team1.CustomerId, row?.team1.ReciptId,row?.team1.imageUrl)
+      createData(i,row?.team1.retailerName,row?.team1.customerID, row?.team1.recieptID,row?.team1.imageUrl)
       
       ))
   
@@ -153,7 +153,8 @@ setUpIndex(upIndex+1)
 
 const deleteRow = () => 
 {
-  db.collection("Recipt").doc(rows[upIndex]?.ReciptId).delete().then(() => {
+  // db.collection("userData").doc('j0lixUNEYZgqT1EufdlbMEoKXG12').collection("url")
+  db.collection("userData").doc('j0lixUNEYZgqT1EufdlbMEoKXG12').collection("url").doc(rows[upIndex]?.receiptID).delete().then(() => {
     console.log("Document successfully deleted!");
 }).catch((error) => {
     console.error("Error removing document: ", error);
@@ -165,11 +166,19 @@ fetchdata()
 
    const ApprovedReciptAdd = () =>{
     
-    db.collection("ApprovedRecipt").doc(rows[upIndex]?.ReciptId).set({
+    db.collection("ApprovedRecipt").doc(rows[upIndex]?.receiptID).set({
       id: rows[upIndex]?.id,
-      CustomerName: rows[upIndex]?.retailerName,
-      ReciptId: rows[upIndex]?.ReciptId,
-      CustomerId: rows[upIndex]?.CustomerId,
+      retailerName: [upIndex]?.retailerName,
+      receiptID: rows[upIndex]?.receiptID,
+      customerID: rows[upIndex]?.customerID,
+      lastFourDigit:lastFourDigit,
+      TransactionDate:transactionDate,
+      TotalSpend:totalSpend,
+
+
+  //     const [lastFourDigit,setLastFourDigit] = useState();
+  // const [totalSpend,setTotalSpend] = useState();
+  // const [transactionDate,setTransactionDate] = useState();
       
     })
     .then((docRef) => {
@@ -182,12 +191,14 @@ fetchdata()
     // const image = rows?.team1.imageUrl;
     const RejectReciptAdd= () =>{
     
-      db.collection("RejectRecipt").doc(rows[upIndex]?.ReciptId).set({
+      db.collection("RejectRecipt").doc(rows[upIndex]?.receiptID).set({
         id: rows[upIndex]?.id,
-        CustomerName: rows[upIndex]?.retailerName,
-        ReciptId: rows[upIndex]?.ReciptId,
-        CustomerId: rows[upIndex]?.CustomerId,
-        
+        retailerName: rows[upIndex]?.retailerName,
+        receiptID: rows[upIndex]?.receiptID,
+        customerID: rows[upIndex]?.customerID,
+        lastFourDigit:lastFourDigit,
+        TransactionDate:transactionDate,
+        TotalSpend:totalSpend,    
       })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -197,7 +208,44 @@ fetchdata()
       });
       }
       // console.log("The length of Index",rows[upIndex]?.RetailerName.length)
+      const RevisionReciptAdd= () =>{
+    
+        db.collection("revisionRecipt").doc(rows[upIndex]?.receiptID).set({
+          id: rows[upIndex]?.id,
+          retailerName: rows[upIndex]?.retailerName,
+          receiptID: rows[upIndex]?.receiptID,
+          customerID: rows[upIndex]?.customerID,
+          lastFourDigit:lastFourDigit,
+          TransactionDate:transactionDate,
+          TotalSpend:totalSpend,    
+        })
+        .then((docRef) => {
+          console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+        });
+        }
 
+        const RevisedReciptAdd= () =>{
+    
+          db.collection("revisedRecipt").doc(rows[upIndex]?.receiptID).set({
+            id: rows[upIndex]?.id,
+            retailerName: rows[upIndex]?.retailerName,
+            receiptID: rows[upIndex]?.receiptID,
+            customerID: rows[upIndex]?.customerID,
+            lastFourDigit:lastFourDigit,
+            TransactionDate:transactionDate,
+            TotalSpend:totalSpend,    
+          })
+          .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+          })
+          .catch((error) => {
+            console.error("Error adding document: ", error);
+          });
+          }
+  
   return ( <div className='container'>
       <h1>NEW RECIPT</h1>
 
@@ -229,8 +277,8 @@ fetchdata()
               </StyledTableCell>
             
               
-              <StyledTableCell align="right">{row.CustomerId}</StyledTableCell>
-              <StyledTableCell align="right">{row.ReciptId}</StyledTableCell>
+              <StyledTableCell align="right">{row.customerID}</StyledTableCell>
+              <StyledTableCell align="right">{row.receiptID}</StyledTableCell>
               {/* <StyledTableCell align="right" onClick ={ () => setCurrentRecord(row)} */}
             <StyledTableCell align="right" onClick ={ () => givemedata(row,row.id)}
             >New</StyledTableCell>
@@ -267,8 +315,8 @@ fetchdata()
             label="Customer Id"
             id="outlined-required"
             // defaultValue="CustomerId"
-            defaultValue={3000}
-            value={rows[upIndex]?.CustomerId}
+            defaultValue={0}
+            value={rows[upIndex]?.customerID}
             variant="outlined"
           />
           <TextField
@@ -299,8 +347,8 @@ fetchdata()
           <TextField
             required
             id="outlined-required"
-            label="Required"
-            defaultValue='Total Spend'
+            label="Total Spend"
+            // defaultValue='Total Spend'
             value={totalSpend}
             variant="outlined"
             onChange={(e)=>setTotalSpend(e.target.value)}
@@ -311,8 +359,8 @@ fetchdata()
           <TextField
             required
             id="outlined-required"
-            label="Required"
-            defaultValue="Last 4 Digit"
+            label="Last 4 Digit"
+            defaultValue="none"
             value={lastFourDigit}
             variant="outlined"
             onChange={(e)=>setLastFourDigit(e.target.value)}
@@ -321,8 +369,9 @@ fetchdata()
           <TextField
             required
             id="outlined-required"
-            label="Required"
-            defaultValue="Retailer Name"
+            label="Retailer Name"
+            // defaultValue="Retailer Name"
+            value={rows[upIndex]?.retailerName}
             variant="outlined"
             // value={rows[upIndex]?.RetailerName}
           />
@@ -338,9 +387,10 @@ fetchdata()
   
   
     <div className="buttons">
+
     <div className= 'HomeNext' >
 
-      { lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.retailerName.length > 0?
+      { lastFourDigit?.length > 0 && totalSpend?.length > 0  && transactionDate?.length > 0  && rows[upIndex]?.retailerName.length > 0 ?
       (
           <button type="button" class="btn btn-success" name="button"
           onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } > Approve </button>)
@@ -350,10 +400,29 @@ fetchdata()
           onClick ={()=> {ApprovedReciptAdd() ; deleteRow()} } >Approve </button>)}
 
 
-
-
-{  lastFourDigit?.length > 0 && totalSpend?.length > 0  && totalSpend?.length > 0 && rows[upIndex]?.rtailerName.length > 0?
+    {lastFourDigit?.length > 0 && totalSpend?.length > 0  && transactionDate?.length > 0 && rows[upIndex]?.retailerName.length > 0?
          ( <button   type="button" class="btn btn-red" name="button"  onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>):(   <button  type="button" class="btn btn-red" name="button"  disabled onClick ={()=> {RejectReciptAdd() ; deleteRow()} }>Reject </button>)}
+
+<br></br>
+
+<br></br>
+{ lastFourDigit?.length > 0 && totalSpend?.length > 0  && transactionDate?.length > 0  && rows[upIndex]?.retailerName.length > 0 ?
+      (
+          <button type="button" class="btn btn-success" name="button"
+          onClick ={()=> {RevisionReciptAdd(); deleteRow()} } > Revision </button>)
+
+          :
+          (   <button type="button" disabled class="btn btn-success" name="button" 
+          onClick ={()=> {RevisionReciptAdd(); deleteRow()} } >Revision </button>)}
+ { lastFourDigit?.length > 0 && totalSpend?.length > 0  && transactionDate?.length > 0  && rows[upIndex]?.retailerName.length > 0 ?
+      (
+          <button type="button" class="btn btn-success" name="button"
+          onClick ={()=> {RevisedReciptAdd() ; deleteRow()} } > Revised </button>)
+
+          :
+          (   <button type="button" disabled class="btn btn-success" name="button" 
+          onClick ={()=> {RevisedReciptAdd(); deleteRow()} } >Revised </button>)}
+
         </div>
     
   
