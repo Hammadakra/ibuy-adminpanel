@@ -77,7 +77,7 @@ useEffect(()=>{
 
   const rows = 
   tabledata?.map((row,i) => (
-      createData(i,row?.team1.CustomerName,row?.team1.customerID, row?.team1.receiptID,false)
+      createData(i,row?.team1.retailerName,row?.team1.customerID, row?.team1.receiptID,false)
       ))
     if (newRec)
     {  

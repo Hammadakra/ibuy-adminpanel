@@ -69,8 +69,8 @@ useEffect(()=>{
   }
   ,[])
 console.log("app Data",tabledata)
-  function createData(id,RetailerName, customerID, receiptID, status) {  
-    return { id,RetailerName, customerID, receiptID, status };
+  function createData(id,retailerName, customerID, receiptID, status) {  
+    return { id,retailerName, customerID, receiptID, status };
   }
 
   const [newRec,setnewRec] = useState(false);
@@ -79,7 +79,7 @@ console.log("app Data",tabledata)
 
   const rows = 
   tabledata?.map((row,i) => (
-      createData(i,row?.team1.CustomerName,row?.team1.customerID, row?.team1.receiptID,false)
+      createData(i,row?.team1.retailerName,row?.team1.customerID, row?.team1.receiptID,false)
       ))
   
 
@@ -87,7 +87,7 @@ console.log("app Data",tabledata)
     if (newRec)
     {  
     const selected = rows.find(r => r.status);
-    console.log("Hello",selected.RetailerName,selected.customerID,selected.ReciptId,selected.status);
+    console.log("Hello",selected.retailerName,selected.customerID,selected.ReciptId,selected.status);
     }
   return ( <div className='container'>
       <h1 style={{textAlign:"center"}}>APPROVED RECIPT</h1>
@@ -109,7 +109,7 @@ console.log("app Data",tabledata)
             <StyledTableRow key={row.name}>
                <StyledTableCell>{row.id}</StyledTableCell>
                
-              <StyledTableCell component="th" scope="row">{row.RetailerName}</StyledTableCell>
+              <StyledTableCell component="th" scope="row">{row.retailerName}</StyledTableCell>
               <StyledTableCell align="right">{row.customerID}</StyledTableCell>
               <StyledTableCell align="right">{row.receiptID}</StyledTableCell>
               <StyledTableCell align="right" onClick={() => {
