@@ -89,24 +89,27 @@ render() {
     </MDBDropdown>
      </>:(" ")}
 
-            {/* <MDBNavItem activeClassName="active">
-              <MDBNavLink to="./planform">Rejected Receipts</MDBNavLink>
-            </MDBNavItem> <MDBNavItem activeClassName="active">
-              <MDBNavLink to="./planform">Submitted for Revision</MDBNavLink>
-            </MDBNavItem> <MDBNavItem activeClassName="active">
-              <MDBNavLink to="./planform">Revised Receipts</MDBNavLink>
-            </MDBNavItem>
-            
-             */}
-      
          
           </MDBNavbarNav>
+          {localStorage.getItem("key") ? <>
+          <MDBNavbarNav left >
+          <MDBNavItem activeClassName="actives">
+              <MDBNavLink  to="./cashback">CashBack Request</MDBNavLink>
+            </MDBNavItem>
+            </MDBNavbarNav>
+
+            <MDBNavbarNav left >
+          <MDBNavItem activeClassName="actives">
+              <MDBNavLink to="./retailerPlanUpdateDaily">Retailer Plans Daily Update</MDBNavLink>
+            </MDBNavItem>
+            </MDBNavbarNav>
+ </>:(" ")}
           <MDBNavbarNav left >
           <MDBNavItem activeClassName="actives">
               <MDBNavLink className="MAINHEAD" to="./">IBUY ADMIN APP</MDBNavLink>
             </MDBNavItem>
             </MDBNavbarNav>
-      
+           
           <MDBNavbarNav right>
            
           

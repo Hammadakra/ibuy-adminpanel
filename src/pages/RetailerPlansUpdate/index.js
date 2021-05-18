@@ -1,131 +1,4 @@
-// import React, { useEffect, useState } from 'react';
-// import { withStyles, makeStyles } from '@material-ui/core/styles';
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
-// import TableHead from '@material-ui/core/TableHead';
-// import TableRow from '@material-ui/core/TableRow';
-// import Paper from '@material-ui/core/Paper';
-// import './style.css';
-// import {auth} from '../../Firebase/Firebase'
-// import db from '../../Firebase/Firebase';
-// // import ReciptAppRej from './ReciptAppRej'
-// import { SettingsInputAntenna } from '@material-ui/icons';
-// import ReciptAppRej from '../ReciptAppRej/ReciptAppRej';
-
-// const StyledTableCell = withStyles((theme) => ({
-//   head: {
-//     backgroundColor: theme.palette.common.black,
-//     color: theme.palette.common.white,
-//   },
-//   body: {
-//     fontSize: 14,
-//   },
-// }))(TableCell);
-
-// const StyledTableRow = withStyles((theme) => ({
-//   root: {
-//     '&:nth-of-type(odd)': {
-//       backgroundColor: theme.palette.action.hover,
-//     },
-//   },
-// }))(TableRow);
-
-
-
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 700,
-//   },
-// });
-
-// export default function CustomizedTables(props) {
-//   const classes = useStyles();
-//   const [appdata,setappdata]=useState();
-//   const [tabledata,settabledata] = useState([])
-//   //  const {ApproveRow}  = props;
-//   // var ApprovedRows=JSON.parse( localStorage.getItem('appArr'))
-// // console.log("The Data storage data",ApprovedRows)
-
-// useEffect(()=>{
-//   db.collection("ApprovedRecipt")
-//     // .orderBy("date")
-//     // .limit(10)
-//     .get()
-//     .then(querySnapshot => {
-//       const Matches = [];
-//       querySnapshot.forEach(function(doc) {
-//         Matches.push({
-//           team1: doc.data(),
-//         });
-//       });
-  
-//       settabledata(Matches);
-//     })
-//     .catch(function(error) {
-//       console.log("Error getting documents: ", error);
-//     });
-//   }
-//   ,[])
-// console.log("app Data",tabledata)
-//   function createData(id,retailerName, customerID, receiptID, status) {  
-//     return { id,retailerName, customerID, receiptID, status };
-//   }
-
-//   const [newRec,setnewRec] = useState(false);
-//   const [currentRecord, setCurrentRecord] = useState();
-//   // console.log("In Approved",ApproveRow)
-
-//   const rows = 
-//   tabledata?.map((row,i) => (
-//       createData(i,row?.team1.retailerName,row?.team1.customerID, row?.team1.receiptID,false)
-//       ))
-  
-
-
-//   return ( <div className='container'>
-//       <h1 style={{textAlign:"center"}}>APPROVED RECIPT</h1>
-//     <TableContainer component={Paper}>
-//       <Table className={classes.table} aria-label="customized table">
-//         <TableHead>
-//           <TableRow>
-            
-//             <StyledTableCell>ID</StyledTableCell>
-//             <StyledTableCell>Retailer Name</StyledTableCell>
-//             <StyledTableCell align="right">Customer Id</StyledTableCell>
-//             <StyledTableCell align="right">Recipt Id</StyledTableCell>
-//             <StyledTableCell align="right">Status</StyledTableCell>
-           
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {rows?.map((row) => (
-//             <StyledTableRow key={row.name}>
-//                <StyledTableCell>{row.id}</StyledTableCell>
-               
-//               <StyledTableCell component="th" scope="row">{row.retailerName}</StyledTableCell>
-//               <StyledTableCell align="right">{row.customerID}</StyledTableCell>
-//               <StyledTableCell align="right">{row.receiptID}</StyledTableCell>
-//               <StyledTableCell align="right" onClick={() => {
-//                 setCurrentRecord(row);
-//               }}>Approve</StyledTableCell>
-          
-//             </StyledTableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-      
-//     </TableContainer>
-
-    
-    
-//     {/* {currentRecord ? <ReciptAppRej row={rows} />:""} */}
-    
-//     </div>
-//   );
-// }
-import React,{useEffect,useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -147,8 +20,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-// import {auth} from '../../Firebase/Firebase'
-import db from '../../Firebase/Firebase';
+
+function createData(RetailerID, PlanID,UpdateDate,PlanStartDate ,PlanEndDate,TotalSalesAchieved,TotalSalesEligibleForCashback,IbuyPaymentDue) {
+  return {RetailerID, PlanID,UpdateDate,PlanStartDate ,PlanEndDate,TotalSalesAchieved,TotalSalesEligibleForCashback,IbuyPaymentDue};
+}
+
+const rows = [
+  createData("213sad", 'asdsad12', '23/2/2021',"3/12/2021" ,'21/1/2021','$1200', '$80',"$45"),
+  
+];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -175,15 +55,19 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-// function createData(id,retailerName, customerID, receiptID, status) {  
-//     return { id,retailerName, customerID, receiptID, status };
-//   }
+// CustomerId, AccountBal,CashBackIssueTillDate ,EligibleForCashBackRequest,CashbackRequest,RequestProcessed
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'id' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Retailer name' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Customer id' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Recipt id' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Status' },
+  { id: 'name',  disablePadding: true, label: 'RetailerID' },
+  { id: 'calories',  disablePadding: false, label: 'PlanID' },
+  { id: 'fat', disablePadding: false, label: 'UpdateDate' },
+  { id: 'protein',  disablePadding: false, label: 'PlanStartDate' },
+  { id: 'carbs',  disablePadding: false, label: 'PlanEndDate' },
+  { id: 'protein',  disablePadding: false, label: 'TotalSalesAchieved' },
+  { id: 'protein',  disablePadding: false, label: 'TotalSalesEligibleForCashback' },
+  { id: 'protein',  disablePadding: false, label: 'IbuyPaymentDue' },
+  
+  
+  // RetailerID, PlanID,UpdateDate,PlanStartDate ,PlanEndDate,TotalSalesAchieved,TotalSalesEligibleForCashback,IbuyPaymentDue
 ];
 
 function EnhancedTableHead(props) {
@@ -193,17 +77,16 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
+        <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
-        </TableCell> */}
+        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -270,17 +153,17 @@ const EnhancedTableToolbar = (props) => {
         [classes.highlight]: numSelected > 0,
       })}
     >
-      {/* {numSelected > 0 ? (
+      {numSelected > 0 ? (
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
           {numSelected} selected
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          CashBack
         </Typography>
-      )} */}
+      )}
 
-      {/* {numSelected > 0 ? (
+      {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
@@ -292,7 +175,7 @@ const EnhancedTableToolbar = (props) => {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
-      )} */}
+      )}
     </Toolbar>
   );
 };
@@ -339,44 +222,6 @@ export default function EnhancedTable() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
-
-  
-  const [appdata,setappdata]=useState();
-  const [tabledata,settabledata] = useState([])
-  //  const {ApproveRow}  = props;
-  // var ApprovedRows=JSON.parse( localStorage.getItem('appArr'))
-// console.log("The Data storage data",ApprovedRows)
-
-useEffect(()=>{
-  db.collection("ApprovedRecipt")
-    // .orderBy("date")
-    // .limit(10)
-    .get()
-    .then(querySnapshot => {
-      const Matches = [];
-      querySnapshot.forEach(function(doc) {
-        Matches.push({
-          team1: doc.data(),
-        });
-      });
-  
-      settabledata(Matches);
-    })
-    .catch(function(error) {
-      console.log("Error getting documents: ", error);
-    });
-  }
-  ,[])
-console.log("app Data",tabledata)
-  function createData(id,retailerName, customerID, recieptID, status) {  
-    return { id,retailerName, customerID, recieptID, status };
-  }
-
-  const rows = 
-  tabledata?.map((row,i) => (
-      createData(i,row?.team1.retailerName,row?.team1.customerID, row?.team1.recieptID,false)
-      ))
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -426,9 +271,8 @@ console.log("app Data",tabledata)
 
   return (
     <div className={classes.root}>
-        <h1 style={{textAlign:"center"}}>APPROVE RECIPT</h1>
       <Paper className={classes.paper}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -462,19 +306,28 @@ console.log("app Data",tabledata)
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      {/* <TableCell padding="checkbox">
+                      {/* // RetailerID, PlanID,UpdateDate,PlanStartDate ,PlanEndDate,TotalSalesAchieved,TotalSalesEligibleForCashback,IbuyPaymentDue */}
+
+                      <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
-                      </TableCell> */}
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.id}
                       </TableCell>
-                      <TableCell align="right">{row.retailerName}</TableCell>
-                      <TableCell align="right">{row.customerID}</TableCell>
-                      <TableCell align="right">{row.recieptID}</TableCell>
-                      <TableCell align="right">Approved</TableCell>
+                      <TableCell component="th" id={labelId} scope="row" padding="none">
+                        {row.RetailerID}
+                      </TableCell>
+                      {/* CustomerId, AccountBal,CashBackIssueTillDate ,EligibleForCashBackRequest,CashbackRequest,RequestProcessed  */}
+                      <TableCell >{row.PlanID}</TableCell>
+                      <TableCell >{row.UpdateDate}</TableCell>
+                      
+                      <TableCell >{row.PlanStartDate}</TableCell>
+                      <TableCell >{row.PlanEndDate}</TableCell>
+                      
+                      <TableCell  >{row.TotalSalesAchieved}</TableCell>
+                      <TableCell  >{row.TotalSalesEligibleForCashback}</TableCell>
+                      <TableCell  >{row.IbuyPaymentDue}</TableCell>
+                      
                     </TableRow>
                   );
                 })}

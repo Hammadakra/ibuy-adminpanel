@@ -9,6 +9,9 @@ import Rejected from './pages/RejectedRecipt/RejectedRecipt';
 import Approve from './pages/ApprovedRecipt/ApproveRecipt';
 import SubmittedForRev from './pages/ReciptSubmitForRevision/ReciptSubmitForRevision';
 import RevisedRecipt from './pages/RevisedRecipt/RevisedRecipt';
+import CashbackRequest from './pages/CashBack'
+import RetailerPlanUpdateDaily from './pages/RetailerPlansUpdate'
+import Pagi from './pagi'
 import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -28,6 +31,10 @@ function App() {
   <Route path="/SubmittedForRev" exact component={SubmittedForRev} />
   <Route path="/Rejected" exact component={Rejected} />
   <Route path="/RevisedRecipt" exact component={RevisedRecipt} />
+  <Route path="/cashback" exact component={CashbackRequest} />
+  <Route path="/retailerPlanUpdateDaily" exact component={RetailerPlanUpdateDaily} />
+  <Route path="/pagi" exact component={Pagi} />
+  
   
   
   </Switch>
