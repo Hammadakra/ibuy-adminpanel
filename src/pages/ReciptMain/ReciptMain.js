@@ -1082,7 +1082,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   highlight:
     theme.palette.type === 'light'
       ? {
-          color: "blue",
+          color: "b",
           backgroundColor: lighten(theme.palette.secondary.light, 0.85),
         }
       : {
